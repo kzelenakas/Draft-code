@@ -1,4 +1,4 @@
-Attribute VB_Name = "Module2"
+Attribute VB_Name = "SplitNumberedItemsInColumnG"
 Sub SplitNumberedItemsInColumnG()
     Dim ws As Worksheet
     Set ws = ActiveSheet
@@ -22,7 +22,6 @@ Sub SplitNumberedItemsInColumnG()
                 Dim j As Long
                 For j = UBound(splitItems) To 1 Step -1
                     ws.Rows(i + 1).Insert Shift:=xlDown
-                    ws.Rows(i).Copy Destination:=ws.Rows(i + 1)
                     ws.Cells(i + 1, "G").Value = Trim(splitItems(j))
                 Next j
 
@@ -59,9 +58,8 @@ Function SplitByNumbering(text As String) As Variant
         Else
             endPos = Len(text)
         End If
-        result(i) = Mid(text, startPos + 1, endPos - startPos)
+        result(i) = Trim(Mid(text, startPos + 1, endPos - startPos))
     Next i
 
     SplitByNumbering = result
 End Function
-
