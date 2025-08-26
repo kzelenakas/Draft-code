@@ -1,0 +1,19 @@
+Sub SaveAllSheetsAsPDF()
+    Dim ws As Worksheet
+    Dim pdfFileName As String
+    Dim pdfFolder As String
+    
+    ' Define the folder to save PDFs
+    pdfFolder = "C:\YourFolder\"
+    
+    ' Loop through each worksheet in the workbook
+    For Each ws In ThisWorkbook.Sheets
+        ' Generate PDF filename based on sheet name
+        pdfFileName = pdfFolder & ws.Name & ".pdf"
+        
+        ' Export each sheet as PDF
+        ws.ExportAsFixedFormat Type:=xlTypePDF, Filename:=pdfFileName, _
+                                Quality:=xlQualityStandard, IncludeDocProperties:=True, _
+                                IgnorePrintAreas:=False, OpenAfterPublish:=False
+    Next ws
+End Sub

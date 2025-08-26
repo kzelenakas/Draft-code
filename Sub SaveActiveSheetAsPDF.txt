@@ -1,0 +1,14 @@
+Sub SaveActiveSheetAsPDF()
+    Dim ws As Worksheet
+    Dim pdfFileName As String
+    
+    ' Reference to the active worksheet
+    Set ws = ActiveSheet
+    
+    ' Define the PDF file name and path
+    pdfFileName = "C:\YourFolder\" & ws.Name & ".pdf"
+    
+    ' Save the active sheet as a PDF
+    ws.ExportAsFixedFormat Type:=xlTypePDF, Filename:=pdfFileName, Quality:=xlQualityStandard, _
+                            IncludeDocProperties:=True, IgnorePrintAreas:=False, OpenAfterPublish:=True
+End Sub
