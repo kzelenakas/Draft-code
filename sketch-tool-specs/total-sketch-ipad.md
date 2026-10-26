@@ -61,7 +61,7 @@ Walls snap to 8 directions through the arrow keys. The cursor snaps to existing 
 - **Current Assignment:** Dwelling [seen]
 - **Current Area Name:** pick list. Seen values: Level 1, Level 2, Level 3, Basement 1, 2 Car Built-in, Concrete Patio, Outbuilding (list heading only) [seen]
 - **Common Levels** list for the area
-- **Area class:** Standard / Non-Standard / Subtract From Living / No-Calc Area
+- **Area class:** Standard / Non-Standard / Subtract From Living / No-Calc Area. Subtract From Living and No-Calc Area are carried over from TOTAL's legacy (pre-UAD 3.6) sketch interface and don't apply under UAD 3.6. The form filler should ignore them and flag any area that uses them for review.
 - **Grade:** Above Grade / Partially Below / Below Grade
 - **Finish:** Finished / Unfinished
 - For garage and patio areas, only the class row was visible. The popover scrolls, so grade and finish rows may sit below it. [seen 56-47 0:08; 58-21 0:05]
@@ -139,7 +139,6 @@ Not demonstrated: new-file setup, symbols (doors, windows, stairs), the Define/I
 
 ## Gaps & Open Questions
 - **GLA total and form transfer:** we need footage of the calculator/summary and of what lands on the 1004 page. This decides the form-filler mapping.
-- **What "Subtract From Living" and "No-Calc Area" do to totals** wasn't demonstrated.
 - **Default naming of carved areas:** is it the last used name or a smart guess?
 - **Partially Below and non-standard finished in the export:** both are required UAD 3.6 reporting. Does TOTAL's export carry Partially Below as its own value, and does it export ANSI-sense non-standard finished area anywhere?
 - **Angle entry** and non-orthogonal walls aren't shown.
@@ -154,7 +153,7 @@ Compared with TrueTracts Inspect (see `truetracts-inspect.md`), TOTAL's strength
 
 Where TrueTracts is already ahead (keep it): explicit property → structure → unit → level hierarchy, ADU handling, ANSI standard vs non-standard finished split, and completeness indicators.
 
-**Data model for import/compatibility:** `Page{areas[]}`, `Area{name, assignment, levelRef, class: Standard|NonStandard|SubtractFromLiving|NoCalc, grade: Above|PartiallyBelow|Below, finish, polygon[], parentArea?}`.
+**Data model for import/compatibility:** `Page{areas[]}`, `Area{name, assignment, levelRef, class: Standard|NonStandard (SubtractFromLiving and NoCalc are legacy, not used for UAD 3.6), grade: Above|PartiallyBelow|Below, finish, polygon[], parentArea?}`.
 **Mapping rule (proposed):**
 - GLA = Σ Standard + Above Grade + Finished.
 - Below-grade area = Below Grade. Partially Below is reported separately as its own UAD 3.6 value, and neither counts toward above-grade GLA.
