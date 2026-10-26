@@ -68,7 +68,7 @@ Walls snap to 8 directions through the arrow keys. The cursor snaps to existing 
 
 ### Auto-classification
 Picking "Basement 1" automatically switched **Standard → Non-Standard** and **Above Grade → Below Grade**. [seen 57-46 0:17→0:18]. Garage and patio were already Non-Standard. [seen]
-**Vocabulary warning:** in TOTAL, "Non-Standard" means *not counted in GLA* (garage, patio, basement). In ANSI Z765 and TrueTracts, "non-standard finished" means *finished space that doesn't meet the standard*, such as low ceilings. These are different concepts, so they must not be mapped to each other.
+**Vocabulary warning:** TOTAL applied "Non-Standard" to the garage, the patio and the basement. That looks like "not counted in GLA," not the ANSI Z765 / UAD 3.6 meaning of non-standard *finished* area (finished space that doesn't meet the standard, such as low ceilings). UAD 3.6 requires reporting non-standard finished area as its own figure, so the form filler must not map TOTAL's "Non-Standard" class to that field without confirming what TOTAL exports. [inferred from the areas it was applied to]
 
 ### Areas created (all values read off screen; arithmetic checked)
 | Area | Page | Class / Grade / Finish | Sq ft | Check |
@@ -133,15 +133,15 @@ Not demonstrated: new-file setup, symbols (doors, windows, stairs), the Define/I
 | Totals to whole sq ft | Supported | Area labels |
 | Below grade separated | Supported (Below Grade auto-set for basement) | [57-46 0:18] |
 | Garage excluded from GLA | Supported (Non-Standard, subtracted from level) | [56-47 0:08] |
-| "Partially Below" grade option | Present. ANSI treats *any* part below grade as below grade, so this needs a mapping rule | [56-09 0:22] |
-| Non-standard finished (ANSI sense) | Not shown. TOTAL's "Non-Standard" is a different concept (see warning above) | — |
+| "Partially Below" grade option | Present. ANSI doesn't separate partially below grade from below grade, but UAD 3.6 requires it to be reported, so this should map straight through to UAD 3.6 (and stay out of above-grade GLA) | [56-09 0:22] |
+| Non-standard finished (ANSI / UAD 3.6 sense) | Not shown. TOTAL's "Non-Standard" class appears to be a different concept (see warning above). UAD 3.6 requires this figure, so its source has to be confirmed | — |
 | Ceiling height / stairwells / exception explanation | Not shown | — |
 
 ## Gaps & Open Questions
 - **GLA total and form transfer:** we need footage of the calculator/summary and of what lands on the 1004 page. This decides the form-filler mapping.
 - **What "Subtract From Living" and "No-Calc Area" do to totals** wasn't demonstrated.
 - **Default naming of carved areas:** is it the last used name or a smart guess?
-- **Partially Below:** does it count toward GLA, basement, or neither?
+- **Partially Below and non-standard finished in the export:** both are required UAD 3.6 reporting. Does TOTAL's export carry Partially Below as its own value, and does it export ANSI-sense non-standard finished area anywhere?
 - **Angle entry** and non-orthogonal walls aren't shown.
 
 ## Implementation Notes — what to bring into our form filler / sketch
@@ -150,14 +150,15 @@ Compared with TrueTracts Inspect (see `truetracts-inspect.md`), TOTAL's strength
 2. **Live "offset to close" indicator.** It's a free error check while measuring in the field. **Adopt.**
 3. **Carve/split with automatic parent subtraction.** Garage, patio and finished/unfinished splits each take 2–3 keystrokes and the totals stay consistent. **Adopt.** This is also the biggest error-reducer for GLA.
 4. **Copy Outline → paste to another level** for stacked floors and basements. **Adopt.** TrueTracts' level stack could do this as "duplicate perimeter to new level."
-5. **Name-driven auto-classification** (Basement → Below Grade). **Adopt, but** keep the ANSI vocabulary TrueTracts already uses, and never reuse TOTAL's "Non-Standard" label.
+5. **Name-driven auto-classification** (Basement → Below Grade). **Adopt, but** keep the ANSI / UAD 3.6 vocabulary TrueTracts already uses, and never reuse TOTAL's "Non-Standard" label for non-GLA areas.
 
 Where TrueTracts is already ahead (keep it): explicit property → structure → unit → level hierarchy, ADU handling, ANSI standard vs non-standard finished split, and completeness indicators.
 
 **Data model for import/compatibility:** `Page{areas[]}`, `Area{name, assignment, levelRef, class: Standard|NonStandard|SubtractFromLiving|NoCalc, grade: Above|PartiallyBelow|Below, finish, polygon[], parentArea?}`.
 **Mapping rule (proposed):**
 - GLA = Σ Standard + Above Grade + Finished.
-- Basement = Below Grade, with Partially Below treated as Below per ANSI.
+- Below-grade area = Below Grade. Partially Below is reported separately as its own UAD 3.6 value, and neither counts toward above-grade GLA.
+- Non-standard finished area (UAD 3.6) has to come from a source that means ANSI non-standard, not from TOTAL's "Non-Standard" class.
 - Garage, patio and porch come from Non-Standard areas, keyed by name.
 
 **Training notes:**

@@ -138,6 +138,7 @@ Steps 1–2 and 5–8 of a full sketch workflow (new sketch, draw and close the 
 | Ceiling height (7 ft / 5 ft) | Not shown | — |
 | Openings to below / stairwells | Not shown | — |
 | Exception explanation field | Not shown | — |
+| Partially below grade (UAD 3.6) | Not shown. Only Above and Below grade values were visible | [seen A 0:00, 0:35] |
 
 ## Gaps & Open Questions
 - **Drawing tools are the biggest gap.** The two 09-33-16 recordings probably cover them, but they need a different transfer route (see below).
@@ -146,6 +147,7 @@ Steps 1–2 and 5–8 of a full sketch workflow (new sketch, draw and close the 
 - **Data oddity in the sample:** Structure 2's only level is named "Level 1" but set as "Level B1 / Below Grade". Is that test data or a naming gap?
 - Submenus for Structure, Rooms, Internal Spaces, Garage/Carport, Amenity and Stamps were never opened.
 - No ceiling-height input, room counts (bed/bath), or export screen was seen.
+- **UAD 3.6 partially below grade:** the only grade values seen were Above grade and Below Grade. UAD 3.6 requires partially below grade area to be reported separately, so check whether the Grade level picker offers a Partially Below option (the picker was never opened). If it doesn't, that's a gap to close.
 
 ## Implementation Notes (form filler)
 **Data structure implied:** `Property{structures[]} → Structure{type, constructionMethod, dwellingStyle, photos[], units[]} → Unit{isADU, levels[]} → Level{name, gradeLevel, finishedDefault, perimeterArea, rooms[]}`, plus car storage as its own collection.
@@ -154,7 +156,8 @@ Steps 1–2 and 5–8 of a full sketch workflow (new sketch, draw and close the 
 | Form field (1004/UAD) | Source | Note |
 |---|---|---|
 | GLA | Main dwelling structure → unit (ADU = No) → above-grade standard finished | **Not** the property headline total |
-| Non-standard finished above grade | Unit → above-grade non-standard | Needs an ANSI explanation/addendum when > 0 |
+| Non-standard finished above grade | Unit → above-grade non-standard | Required UAD 3.6 reporting. Also needs an ANSI explanation when > 0 |
+| Partially below grade area | Level → Grade level = Partially Below (if offered) | Required UAD 3.6 reporting. Not seen in the demo |
 | Basement area / finished | Below-grade level perimeter area / below-grade finished | |
 | Garage / carport | Car storage list (type + sq ft) | Car count not seen |
 | Design / style | Structure → Dwelling style | Empty in demo |
