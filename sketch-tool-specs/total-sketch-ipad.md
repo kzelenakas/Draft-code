@@ -199,3 +199,34 @@ So the offset indicator works the same when patching an existing shape as when d
 - **Typed wall moves**: adopt. Our version should warn when a move flips a wall's direction (the 12 ▼ case) or changes the area by more than a set amount.
 - **Decimal length stepper**: adopt, with a fine step of 0.1 ft.
 - **Diagonal labels**: show one decimal place but calculate from the true length, as TOTAL does.
+
+## Addendum 2 — re-exported 10-26 recordings (carve-out, attached exterior areas, area-name list)
+Source: 2 re-exported recordings, "ScreenRecording_10-26-2026" 17-13-15 (0:25) and 17-13-51 (0:24), 640×448, sampled at 2 fps plus full-res key frames. **Not analyzed:** 17-12-37 (9.0 MB), 17-14-24 (11.1 MB) and 17-15-37 (8.2 MB) are still over the Drive connector's limit (about 6 MB). 17-16-25 wasn't re-uploaded.
+
+### Garage carved from Level 1 [seen 17-13-15]
+- Start: Level 1 = **1618** sq ft (60' top, 31' left, 17' and 6' bottom-left step, 45° bay). [0:00]
+- Drawing started at the inside corner. After 14 ▲, 17 ◄, the offset indicator read `14' ↓ 17' →`. Enter closed the shape along the existing walls. [0:11]
+- Properties opened with "1 Car Built-in" (Non-Standard) preselected. Result: **1 Car Built-in 340** sq ft, Level 1 **1278** sq ft. [0:12]
+- Checks: 17 × 20 = 340 ✓, 1618 − 340 = 1278 ✓ [verified arithmetic]
+- This confirms the carve behavior from the 10-25 clips, and that only two walls need to be keyed in when the other two already exist.
+
+### Attached exterior area (deck/patio) [seen 17-13-51]
+- Drawing started on Level 1's top wall and went **outside** the structure: 12' up, 25' across, 12' down to the wall, then enter. [0:14–0:16]
+- Result: a new area of **300** sq ft (25 × 12 ✓). **Level 1 stayed at 1278.** An area drawn outside the parent is added next to it, not subtracted from it. [0:17]
+- Properties preselected "Concrete Patio" (Non-Standard). The user scrolled the name list and picked **Composite Deck**. [0:17–0:24]
+- So the same "draw and press enter" action carves an area when drawn *inside* a shape and attaches one when drawn *outside*. The app decides which by geometry, without asking.
+
+### Area-name pick list (grouped) [seen 17-13-51 0:18–0:21]
+| Group | Names seen |
+|---|---|
+| Common Levels | Level 1, Level 2, Level 3, Basement 1 |
+| Outbuilding | Outbuilding (New) |
+| Vehicle Storage | … 3 Car Built-in, Garage, Parking Garage, 1 Car Port, 2 Car Port, 3 Car Port, … Vehicle Storage (Other) |
+| Amenities | Composite Deck, Wood Deck, Deck, Concrete Patio, Patio… |
+
+The list was only partly visible while scrolling ("…" = rows not captured). The 1, 2 and 3 Car Attached / Detached / Built-in names are [inferred] from rows partly visible at 0:19.
+
+### What this adds to the recommendations
+- **The name decides the form field.** Garage/carport names map to UAD vehicle storage (type and car count are in the name), and deck/patio names map to amenities. The form filler should parse these from the TOTAL name, not from the Non-Standard class. Every vehicle-storage and amenity name used the same Non-Standard class.
+- **Inside vs outside geometry:** adopt the single "draw then enter" action, but our version should show "Carve from Level 1" or "Attach to Level 1" before committing. TOTAL gives no cue, and a carve drawn by mistake silently reduces GLA.
+- **Default name preselection** (1 Car Built-in, Concrete Patio) saves taps but is also easy to accept by accident. Training point: always check the name before tapping Ok.
