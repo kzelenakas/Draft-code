@@ -129,7 +129,7 @@ Not demonstrated: new-file setup, symbols (doors, windows, stairs), the Define/I
 ## ANSI Z765 Observations
 | Requirement | Status | Evidence |
 |---|---|---|
-| Precision to inch / 0.1 ft | Not shown (decimal key exists, only whole feet used) | — |
+| Precision to inch / 0.1 ft | Supported: wall lengths step in 0.1 ft (see Addendum) | [19-44-34 0:07–0:11] |
 | Totals to whole sq ft | Supported | Area labels |
 | Below grade separated | Supported (Below Grade auto-set for basement) | [57-46 0:18] |
 | Garage excluded from GLA | Supported (Non-Standard, subtracted from level) | [56-47 0:08] |
@@ -165,3 +165,37 @@ Where TrueTracts is already ahead (keep it): explicit property → structure →
 2. After carving a garage, confirm the parent level shrank.
 3. After pasting an outline, rename it. It keeps the old label ("Level 1") until you do. [seen 57-46 0:13–0:17]
 4. Check the grade and finish on basement splits. The unfinished portion has to be set by hand.
+
+## Addendum — 10-26 recordings (wall editing, diagonals, decimal precision)
+Source: 2 of 8 recordings in the folder, "ScreenRecording_10-26-2026" 17-15-11 (0:12) and 19-44-34 (0:24), 2388×1668, 72 frames at 2 fps plus full-res key frames. The other 6 (17-12-37, 17-13-15, 17-13-51, 17-14-24, 17-15-37, 17-16-25; 8.9–30 MB) were too large for the Drive connector and were **not analyzed**.
+
+### Moving a wall by a typed distance
+Select a wall to get the line toolbar, type a distance, then tap an arrow. The wall moves that far, and the walls on either side stretch or shrink to stay connected. [seen 17-15-11]
+- The 17' wall of Basement 1 was selected (Angle 270, Length 17'). [0:04]
+- `6 ▼`: the left wall goes from 11' to 17', the inside wall from 14' to 8', and the area from 1278 to **1380**. [0:04–0:04.5]
+- `12 ▼`: the wall moves past the bottom wall line. The left wall becomes 29', the inside wall flips to a 4' step-down, and the area becomes **1584**. [0:06.5–0:07]
+- Checks: 1278 + 17×6 = 1380 ✓, 1380 + 17×12 = 1584 ✓ [verified arithmetic]
+- The wall can cross an adjoining wall and the shape re-forms as a step-out with no warning. [seen 0:07] That's useful, but it's also a silent way to make a big area change.
+
+### Diagonal (45°) walls
+The same sketch has a 6' bay on the bottom wall with two **2.8'** 45° walls. Diagonal lengths are shown to one decimal place. [seen 17-15-11 0:00]
+Check: 60×25 = 1500, minus the 17×14 notch = 1262, plus the bay trapezoid ((6 + 10) ÷ 2 × 2 = 16) = **1278** ✓. The 2.8' label is 2√2 = 2.83 rounded, so the area uses the true length, not the rounded label. [verified arithmetic]
+
+### Length stepper and decimal precision
+- With a wall selected, the Length ◀ ▶ buttons step the length. Holding ▶ took the top wall from 43' through 43.2, 43.5, 43.7, 44.1, 44.3, 44.6 and 44.9 to 45'. [seen 19-44-34 0:05.5–0:11]. Press-and-hold acceleration is [inferred] from the uneven steps.
+- **Lengths can be set in tenths of a foot**, which meets the ANSI Z765 precision rule (nearest inch or 0.1 ft). This replaces "Not shown" in the ANSI table above.
+
+### Fixing a shape that won't close
+[seen 19-44-34]
+1. The right wall (25') was selected, then removed. The input wasn't visible. [0:00–0:05.5]
+2. The top wall was stretched from 43' to 45' with the stepper. [0:05.5–0:12]
+3. Draw mode started from the end of the top wall. The offset indicator read `25' ↓  2' ←`. [0:15.5–0:16]
+4. `20 ▼` drew a 20' wall, leaving `5' ↓  2' ←`. [0:18–0:18.5]
+5. `2 ◄`, then `▼` with no number, and enter closed the gap to the bottom wall's open end. The result is a 2' jog. [0:19–0:21.5]
+
+So the offset indicator works the same when patching an existing shape as when drawing a new one.
+
+### What this adds to the recommendations
+- **Typed wall moves**: adopt. Our version should warn when a move flips a wall's direction (the 12 ▼ case) or changes the area by more than a set amount.
+- **Decimal length stepper**: adopt, with a fine step of 0.1 ft.
+- **Diagonal labels**: show one decimal place but calculate from the true length, as TOTAL does.
